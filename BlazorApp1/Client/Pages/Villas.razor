@@ -10,14 +10,40 @@
 }
 else
 {
-	<ul>
-		@foreach (var villa in villas)
-		{
-			<li>@villa.Name - @villa.Rate </li>
-			<button onclick="@(() => EditVilla(villa.Id))" class="btn btn-primary">Edit Villa</button>
-		}
-	</ul>
-	<button @onclick="AddVilla" class="btn btn-primary">Add Villa</button>
+	<button @onclick="AddVilla" class="btn btn-primary">Add new Villa</button>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Rate</th>
+                <th>Occupancy</th>
+                <th>Sqft</th>
+                <th>Details</th>
+                <th>Image</th>
+                <th>Amenity</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var villa in villas)
+            {
+                <tr>
+                    <td>@villa.Name</td>
+                    <td>@villa.Rate</td>
+                    <td>@villa.Occupancy</td>
+                    <td>@villa.Sqft</td>
+                    <td>@villa.Details</td>
+                    <td><img src="@villa.ImageUrl" alt="@villa.Name" style="width:100px;" /></td>
+                    <td>@villa.Amenity</td>
+                    <td>
+                        <button onclick="@(() => EditVilla(villa.Id))" class="btn btn-secondary">Edit</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
 }
 
 @code {
