@@ -116,5 +116,25 @@ namespace BlazorApp1.Server.Controllers
 
 		}
 
-	}
+        [HttpDelete("{id:int}", Name = "DeleteVilla")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult DeleteVilla(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+            var villa = _db.Villas.FirstOrDefault(u => u.Id == id);
+            if (villa == null)
+            {
+                return NotFound();
+            }
+            _db.Villas.Remove(villa);
+            _db.SaveChanges();
+            return NoContent();
+        }
+
+    }
 }

@@ -17,7 +17,7 @@ else
 			<button onclick="@(() => EditVilla(villa.Id))" class="btn btn-primary">Edit Villa</button>
 		}
 	</ul>
-	<button @onclick="AddVilla" class="btn btn-primary">Add Villa</button> 
+	<button @onclick="AddVilla" class="btn btn-primary">Add Villa</button>
 }
 
 @code {
@@ -41,7 +41,6 @@ else
 	public void EditVilla(int id)
 	{
 		NavigationManager.NavigateTo($"/villa/{id}");
-		Console.WriteLine(id);
 	}
 
 }
