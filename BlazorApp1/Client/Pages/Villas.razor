@@ -1,6 +1,7 @@
 ﻿@page "/villas"
 @inject HttpClient Http;
 @inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
 
 <h3>Villas</h3>
 
@@ -44,11 +45,17 @@ else
         </tbody>
     </table>
 
+    <div class="mb-3">
+        <p>Enter villa's ID :</p>
+        <input type="text" @bind="searchId" class="form-control mb-3" placeholder="Enter Villa ID">
+        <button class="btn btn-primary" @onclick="SearchVilla">Search</button>
+    </div>
 }
 
 @code {
 
 	List<VillaDTO> villas = new List<VillaDTO>();
+    int searchId;
 
 	protected override async Task OnInitializedAsync()
 	{
@@ -68,5 +75,19 @@ else
 	{
 		NavigationManager.NavigateTo($"/villa/{id}");
 	}
+
+    public async void SearchVilla()
+    {
+        var foundVilla = villas.FirstOrDefault(v => v.Id == searchId);
+        if (foundVilla != null)
+        {
+            NavigationManager.NavigateTo($"/villa/{foundVilla.Id}");
+        }
+        else
+        {
+            Console.WriteLine("Villa not found.");
+            await JsRuntime.InvokeVoidAsync("alert", "Villa not found");
+        }
+    }
 
 }

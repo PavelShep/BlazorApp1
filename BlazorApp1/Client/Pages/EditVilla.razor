@@ -2,6 +2,7 @@
 @page "/villa/{id:int}"
 @inject HttpClient Http;
 @inject NavigationManager NavigationManager;
+@inject IJSRuntime JsRuntime;
 
 @if (Id is null)
 {
@@ -44,11 +45,12 @@ else
         <input type="text" class="form-control" id="Amenity" @bind="villa.Amenity" />
     </div>
     <button type="submit" class="btn btn-primary">Save</button>
-    @if (Id is not null)
-    {
-        <button @onclick="DeleteVilla" class="btn btn-danger ms-4 ">Delete</button>
-    } 
 </EditForm>
+
+@if (Id is not null)
+{
+    <button @onclick="DeleteVilla" class="btn btn-danger mt-3">Delete</button>
+}
 
 @code {
     [Parameter]
@@ -70,6 +72,7 @@ else
     async Task DeleteVilla()
     {
         await Http.DeleteAsync($"api/VillaAPI/{Id}");
+        await JsRuntime.InvokeVoidAsync("alert", "Successfully deleted");
         NavigationManager.NavigateTo("/villas");
     }
 
@@ -78,11 +81,13 @@ else
         if (Id is null)
         {
             await Http.PostAsJsonAsync("api/VillaAPI", villa);
+            await JsRuntime.InvokeVoidAsync("alert", "Successfully created");
         }
         else
         {
             villa.Id = Convert.ToInt32(Id);
             await Http.PutAsJsonAsync($"api/VillaAPI/{Id}", villa);
+            await JsRuntime.InvokeVoidAsync("alert", "Successfully updated");
         }
         NavigationManager.NavigateTo("/villas");
     }
