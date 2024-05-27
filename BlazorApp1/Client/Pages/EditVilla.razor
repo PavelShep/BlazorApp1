@@ -51,6 +51,17 @@ else
     public int? Id { get; set; }
     VillaDTO villa = new VillaDTO();
 
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id is not null)
+        {
+            var result = await Http.GetFromJsonAsync<VillaDTO>($"api/VillaAPI/{Id}");
+            if (result is not null)
+            {
+                villa = result;
+            }
+        }
+    } 
 
     async Task HandleSubmit()
     {
