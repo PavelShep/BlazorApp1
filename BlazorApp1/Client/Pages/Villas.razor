@@ -1,0 +1,33 @@
+﻿@page "/villas"
+@inject HttpClient Http;
+
+<h3>Villas</h3>
+
+@if (villas.Count <= 0)
+{
+	<span>Loading Villas...</span>
+}
+else
+{
+	<ul>
+		@foreach (var villa in villas)
+		{
+			<li>@villa.Name - @villa.Rate</li>
+		}
+	</ul>
+}
+
+@code {
+
+	List<VillaDTO> villas = new List<VillaDTO>();
+
+	protected override async Task OnInitializedAsync()
+	{
+		var result = await Http.GetFromJsonAsync<List<VillaDTO>>("api/VillaAPI");
+		if (result != null)
+		{
+			villas = result;
+		}
+	}
+
+}
