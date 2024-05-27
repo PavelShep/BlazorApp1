@@ -1,0 +1,68 @@
+﻿@page "/villa"
+@page "/villa/{id:int}"
+@inject HttpClient Http;
+@inject NavigationManager NavigationManager;
+
+@if (Id is null)
+{
+    <PageTitle>Add a new Villa</PageTitle>
+    <h3>Add a new Villa</h3>
+}
+else
+{
+    <PageTitle>Edit Villa</PageTitle>
+    <h3>Edit Villa</h3>
+}
+
+<EditForm Model="villa" OnSubmit="HandleSubmit">
+    <div class="form-group">
+        <label for="Name">Name:</label>
+        <input type="text" class="form-control" id="Name" @bind="villa.Name" />
+    </div>
+    <div class="form-group">
+        <label for="Occupancy">Occupancy:</label>
+        <input type="number" class="form-control" id="Occupancy" @bind="villa.Occupancy" />
+    </div>
+    <div class="form-group">
+        <label for="Sqft">Sqft:</label>
+        <input type="number" class="form-control" id="Sqft" @bind="villa.Sqft" />
+    </div>
+    <div class="form-group">
+        <label for="Details">Details:</label>
+        <textarea class="form-control" id="Details" @bind="villa.Details"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="Rate">Rate:</label>
+        <input type="number" class="form-control" id="Rate" @bind="villa.Rate" />
+    </div>
+    <div class="form-group">
+        <label for="ImageUrl">Image URL:</label>
+        <input type="text" class="form-control" id="ImageUrl" @bind="villa.ImageUrl" />
+    </div>
+    <div class="form-group">
+        <label for="Amenity">Amenity:</label>
+        <input type="text" class="form-control" id="Amenity" @bind="villa.Amenity" />
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+    VillaDTO villa = new VillaDTO();
+
+
+    async Task HandleSubmit()
+    {
+        if (Id is null)
+        {
+            await Http.PostAsJsonAsync("api/VillaAPI", villa);
+        }
+        else
+        {
+            villa.Id = Convert.ToInt32(Id);
+            await Http.PutAsJsonAsync($"api/VillaAPI/{Id}", villa);
+        }
+        NavigationManager.NavigateTo("/villas");
+    }
+}

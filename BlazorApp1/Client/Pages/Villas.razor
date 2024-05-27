@@ -1,5 +1,6 @@
 ﻿@page "/villas"
 @inject HttpClient Http;
+@inject NavigationManager NavigationManager;
 
 <h3>Villas</h3>
 
@@ -12,9 +13,11 @@ else
 	<ul>
 		@foreach (var villa in villas)
 		{
-			<li>@villa.Name - @villa.Rate</li>
+			<li>@villa.Name - @villa.Rate </li>
+			<button onclick="@(() => EditVilla(villa.Id))" class="btn btn-primary">Edit Villa</button>
 		}
 	</ul>
+	<button @onclick="AddVilla" class="btn btn-primary">Add Villa</button> 
 }
 
 @code {
@@ -28,6 +31,17 @@ else
 		{
 			villas = result;
 		}
+	}
+
+	public void AddVilla()
+	{
+		NavigationManager.NavigateTo("/villa");
+	}
+
+	public void EditVilla(int id)
+	{
+		NavigationManager.NavigateTo($"/villa/{id}");
+		Console.WriteLine(id);
 	}
 
 }
